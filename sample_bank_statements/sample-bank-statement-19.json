@@ -1,4 +1,11 @@
 {
+  "nonSensitiveInfo": {
+    "dataClass": "synthetic-demo",
+    "currency": "USD",
+    "country": "US",
+    "schemaVersion": "1.0.0",
+    "containsRealCustomerData": false
+  },
   "recordId": 19,
   "bank": "Evergreen Federal Credit Union",
   "accountType": "Checking",

@@ -1,0 +1,24 @@
+{
+  "nonSensitiveInfo": {
+    "dataClass": "synthetic-demo",
+    "currency": "USD",
+    "country": "US",
+    "schemaVersion": "1.0.0",
+    "containsRealCustomerData": false
+  },
+  "recordId": "�",
+  "bank": "�",
+  "accountType": "�",
+  "accountNumberMasked": "�",
+  "statementPeriod": {
+    "start": "�",
+    "end": "�"
+  },
+  "openingBalance": "�",
+  "transaction": {
+    "date": "�",
+    "description": "�",
+    "amount": "�"
+  },
+  "runningBalance": "�"
+}

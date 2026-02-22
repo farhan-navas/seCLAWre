@@ -1,0 +1,11 @@
+{
+  "datasetName": "Sample Bank Statements",
+  "variant": "original",
+  "containsRealCustomerData": false,
+  "currency": "USD",
+  "country": "US",
+  "statementPeriodMonth": "2026-01",
+  "recordCount": 20,
+  "schemaVersion": "1.0.0",
+  "notes": "Synthetic sample records for testing and demos."
+}
