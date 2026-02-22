@@ -1,0 +1,17 @@
+{
+  "recordId": 4,
+  "bank": "Evergreen Federal Credit Union",
+  "accountType": "Checking",
+  "accountNumberMasked": "XXXX-4219",
+  "statementPeriod": {
+    "start": "2026-01-01",
+    "end": "2026-01-31"
+  },
+  "openingBalance": 2315.44,
+  "transaction": {
+    "date": "2026-01-05",
+    "description": "Coffee Shop - Bean Harbor",
+    "amount": -8.75
+  },
+  "runningBalance": 4541.19
+}

@@ -1,0 +1,17 @@
+{
+  "recordId": 13,
+  "bank": "Evergreen Federal Credit Union",
+  "accountType": "Checking",
+  "accountNumberMasked": "XXXX-4219",
+  "statementPeriod": {
+    "start": "2026-01-01",
+    "end": "2026-01-31"
+  },
+  "openingBalance": 2315.44,
+  "transaction": {
+    "date": "2026-01-17",
+    "description": "Online Shopping - TechKart",
+    "amount": -179.45
+  },
+  "runningBalance": 2571.47
+}

@@ -1,0 +1,17 @@
+{
+  "recordId": 19,
+  "bank": "Evergreen Federal Credit Union",
+  "accountType": "Checking",
+  "accountNumberMasked": "XXXX-4219",
+  "statementPeriod": {
+    "start": "2026-01-01",
+    "end": "2026-01-31"
+  },
+  "openingBalance": 2315.44,
+  "transaction": {
+    "date": "2026-01-28",
+    "description": "Interest Credit",
+    "amount": 1.76
+  },
+  "runningBalance": 1863.47
+}

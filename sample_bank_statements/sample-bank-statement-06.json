@@ -1,0 +1,17 @@
+{
+  "recordId": 6,
+  "bank": "Evergreen Federal Credit Union",
+  "accountType": "Checking",
+  "accountNumberMasked": "XXXX-4219",
+  "statementPeriod": {
+    "start": "2026-01-01",
+    "end": "2026-01-31"
+  },
+  "openingBalance": 2315.44,
+  "transaction": {
+    "date": "2026-01-07",
+    "description": "Streaming Subscription - CinePlay",
+    "amount": -14.99
+  },
+  "runningBalance": 3076.2
+}

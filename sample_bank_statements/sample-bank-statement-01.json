@@ -1,0 +1,17 @@
+{
+  "recordId": 1,
+  "bank": "Evergreen Federal Credit Union",
+  "accountType": "Checking",
+  "accountNumberMasked": "XXXX-4219",
+  "statementPeriod": {
+    "start": "2026-01-01",
+    "end": "2026-01-31"
+  },
+  "openingBalance": 2315.44,
+  "transaction": {
+    "date": "2026-01-02",
+    "description": "Payroll Deposit - Northwind Labs",
+    "amount": 2450.0
+  },
+  "runningBalance": 4765.44
+}
