@@ -57,6 +57,7 @@ import type { DevicePairingList } from "./controllers/devices.ts";
 import type { ExecApprovalRequest } from "./controllers/exec-approval.ts";
 import type { ExecApprovalsFile, ExecApprovalsSnapshot } from "./controllers/exec-approvals.ts";
 import type { SkillMessage } from "./controllers/skills.ts";
+import { createSpeechDictationController } from "./controllers/speech-dictation.ts";
 import type { GatewayBrowserClient, GatewayHelloOk } from "./gateway.ts";
 import type { Tab } from "./navigation.ts";
 import { loadSettings, type UiSettings } from "./storage.ts";
@@ -146,6 +147,9 @@ export class OpenClawApp extends LitElement {
   @state() chatThinkingLevel: string | null = null;
   @state() chatQueue: ChatQueueItem[] = [];
   @state() chatAttachments: ChatAttachment[] = [];
+  @state() chatDictationListening = false;
+  @state() chatDictationTranscript = "";
+  @state() chatDictationError: string | null = null;
   @state() chatManualRefreshInFlight = false;
   // Sidebar state for tool output viewing
   @state() sidebarOpen = false;
@@ -357,6 +361,28 @@ export class OpenClawApp extends LitElement {
   private themeMedia: MediaQueryList | null = null;
   private themeMediaHandler: ((event: MediaQueryListEvent) => void) | null = null;
   private topbarObserver: ResizeObserver | null = null;
+  private chatDictation = createSpeechDictationController({
+    onListeningChange: (listening) => {
+      this.chatDictationListening = listening;
+      if (!listening) {
+        this.chatDictationTranscript = "";
+      }
+    },
+    onPartial: (text) => {
+      this.chatDictationTranscript = text;
+    },
+    onFinal: (text) => {
+      const trimmed = text.trim();
+      if (!trimmed) {
+        return;
+      }
+      this.chatMessage = trimmed;
+      void this.handleSendChat(trimmed);
+    },
+    onError: (message) => {
+      this.chatDictationError = message || null;
+    },
+  });
 
   createRenderRoot() {
     return this;
@@ -372,6 +398,7 @@ export class OpenClawApp extends LitElement {
   }
 
   disconnectedCallback() {
+    this.chatDictation.dispose();
     handleDisconnected(this as unknown as Parameters<typeof handleDisconnected>[0]);
     super.disconnectedCallback();
   }
@@ -463,6 +490,22 @@ export class OpenClawApp extends LitElement {
       messageOverride,
       opts,
     );
+  }
+
+  isChatDictationSupported() {
+    return this.chatDictation.isSupported();
+  }
+
+  toggleChatDictation() {
+    if (!this.connected) {
+      return;
+    }
+    this.chatDictationError = null;
+    this.chatDictation.toggle();
+  }
+
+  stopChatDictation() {
+    this.chatDictation.stop();
   }
 
   async handleWhatsAppStart(force: boolean) {

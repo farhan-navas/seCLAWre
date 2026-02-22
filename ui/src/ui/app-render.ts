@@ -801,9 +801,12 @@ export function renderApp(state: AppViewState) {
             ? renderChat({
                 sessionKey: state.sessionKey,
                 onSessionKeyChange: (next) => {
+                  state.stopChatDictation();
                   state.sessionKey = next;
                   state.chatMessage = "";
                   state.chatAttachments = [];
+                  state.chatDictationTranscript = "";
+                  state.chatDictationError = null;
                   state.chatStream = null;
                   state.chatStreamStartedAt = null;
                   state.chatRunId = null;
@@ -831,6 +834,10 @@ export function renderApp(state: AppViewState) {
                 stream: state.chatStream,
                 streamStartedAt: state.chatStreamStartedAt,
                 draft: state.chatMessage,
+                dictationSupported: state.isChatDictationSupported(),
+                dictationListening: state.chatDictationListening,
+                dictationTranscript: state.chatDictationTranscript,
+                dictationError: state.chatDictationError,
                 queue: state.chatQueue,
                 connected: state.connected,
                 canSend: state.connected,
@@ -853,9 +860,8 @@ export function renderApp(state: AppViewState) {
                 },
                 onChatScroll: (event) => state.handleChatScroll(event),
                 onDraftChange: (next) => (state.chatMessage = next),
-                attachments: state.chatAttachments,
-                onAttachmentsChange: (next) => (state.chatAttachments = next),
                 onSend: () => state.handleSendChat(),
+                onToggleDictation: () => state.toggleChatDictation(),
                 canAbort: Boolean(state.chatRunId),
                 onAbort: () => void state.handleAbortChat(),
                 onQueueRemove: (id) => state.removeQueuedMessage(id),
