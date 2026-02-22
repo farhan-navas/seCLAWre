@@ -48,24 +48,50 @@ def models():
 @app.post("/v1/chat/completions")
 def complete(req: ChatRequest):
     print(f"[cactus-provider] >> request: {len(req.messages)} messages, {len(req.tools or [])} tools")
-    for m in req.messages:
-        role = m.get("role", "?")
-        content = m.get("content", "")
-        print(f"  [{role}] {str(content)[:120]}")
-    for t in (req.tools or []):
-        fn = t.get("function", {})
-        print(f"  [tool] {fn.get('name')} — {fn.get('description','')[:80]}")
     t0 = time.time()
 
     cactus_reset(_model)
 
-    cactus_tools = req.tools or []
+    ALLOWED_TOOLS = {"read", "edit", "write", "exec", "process"}
+    cactus_tools = [
+        t for t in (req.tools or [])
+        if t.get("function", {}).get("name") in ALLOWED_TOOLS
+    ]
     has_tools = bool(cactus_tools)
     force_tools = has_tools and req.tool_choice != "none"
+    print(f"  [filtered tools] {[t['function']['name'] for t in cactus_tools]}")
+
+    # Normalize messages:
+    # 1. Extract plain text from content blocks ([{'type':'text','text':'...'}])
+    # 2. Strip the ## Tooling section from system prompt (already handled via tools param)
+    def normalize_content(content):
+        if isinstance(content, list):
+            return " ".join(
+                block.get("text", "") for block in content
+                if isinstance(block, dict) and block.get("type") == "text"
+            )
+        return content or ""
+
+    def strip_tooling_section(text):
+        import re
+        return re.sub(r"## Tooling.*", "", text, flags=re.DOTALL).strip()
+
+    messages = []
+    for m in req.messages:
+        role = m.get("role", "?")
+        content = normalize_content(m.get("content", ""))
+        if role == "system":
+            content = strip_tooling_section(content)
+        if content.strip():
+            messages.append({"role": role, "content": content})
+
+    print(f"  [messages going to model]")
+    for m in messages:
+        print(f"    [{m['role']}] {m['content'][:200]}")
 
     raw_str = cactus_complete(
         _model,
-        req.messages,
+        messages,
         tools=cactus_tools if has_tools else None,
         force_tools=force_tools,
         max_tokens=req.max_tokens or 512,
